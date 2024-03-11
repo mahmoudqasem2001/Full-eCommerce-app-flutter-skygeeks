@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "217825787335",
+    "project_id": "sky-ecommerce-app-c5e87",
+    "storage_bucket": "sky-ecommerce-app-c5e87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217825787335:android:22759c1bb9d65f95872de2",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS0PrqOXP34wkSIF0g1JSUocc9hhm4ViY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
