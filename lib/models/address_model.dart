@@ -34,4 +34,19 @@ class AddressModel {
       isFav: map['isFav'] ?? '',
     );
   }
+  AddressModel copyWith({
+    String? id,
+    String? imgUrl,
+    String? name,
+    String? address,
+    bool? isFav,
+  }) {
+    return AddressModel(
+      id: id ?? this.id,
+      imgUrl: imgUrl ?? this.imgUrl,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      isFav: isFav ?? this.isFav,
+    );
+  }
 }

@@ -16,12 +16,19 @@ final class CheckoutLoaded extends CheckoutState {
   final List<CartOrdersModel> cartItems;
   final AddressModel preferredLocation;
   final PaymentMethodModel preferredPaymentMethod;
+  final List<PaymentMethodModel> paymentMethods;
+
   final double totalAmount;
+  final List<AddressModel> addresses;
+  final AddressModel address;
 
   CheckoutLoaded({
     required this.cartItems,
     required this.preferredLocation,
     required this.preferredPaymentMethod,
     required this.totalAmount,
+    required this.addresses,
+    required this.address,
+    required this.paymentMethods,
   });
 }

@@ -1,31 +1,5 @@
 import 'dart:convert';
 
-class LinkedAccount {
-  final String provider;
-  final String imgLink;
-
-  LinkedAccount({required this.provider, required this.imgLink});
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'provider': provider,
-      'imgLink': imgLink,
-    };
-  }
-
-  factory LinkedAccount.fromMap(Map<String, dynamic> map) {
-    return LinkedAccount(
-      provider: map['provider'] as String,
-      imgLink: map['imgLink'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory LinkedAccount.fromJson(String source) =>
-      LinkedAccount.fromMap(json.decode(source) as Map<String, dynamic>);
-}
-
 class UserModel {
   final String name;
   final String email;

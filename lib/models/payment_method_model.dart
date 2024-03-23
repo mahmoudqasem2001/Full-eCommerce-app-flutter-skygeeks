@@ -47,4 +47,25 @@ class PaymentMethodModel {
       cardHolderName: map['cardHolderName'] ?? '',
     );
   }
+  PaymentMethodModel copyWith({
+    String? id,
+    String? imgUrl,
+    String? name,
+    String? cardNumber,
+    String? expiryDate,
+    String? cvv,
+    String? cardHolderName,
+    bool? isFav,
+  }) {
+    return PaymentMethodModel(
+      id: id ?? this.id,
+      imgUrl: imgUrl ?? this.imgUrl,
+      name: name ?? this.name,
+      cardNumber: cardNumber ?? this.cardNumber,
+      expiryDate: expiryDate ?? this.expiryDate,
+      cvv: cvv ?? this.cvv,
+      cardHolderName: cardHolderName ?? this.cardHolderName,
+      isFav: isFav ?? this.isFav,
+    );
+  }
 }

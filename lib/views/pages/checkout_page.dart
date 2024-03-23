@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/utils/app_colors.dart';
 import 'package:ecommerce_app/view_models/checkout_cubit/checkout_cubit.dart';
+import 'package:ecommerce_app/views/pages/address_page.dart';
 import 'package:ecommerce_app/views/widgets/checkout_cart_item_widget.dart';
 import 'package:ecommerce_app/views/widgets/checkout_title_widget.dart';
 import 'package:ecommerce_app/views/widgets/location_item_widget.dart';
@@ -14,6 +15,8 @@ class CheckoutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<CheckoutCubit>(context);
+    final size = MediaQuery.of(context).size;
+    String? paymentMethod;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +41,6 @@ class CheckoutPage extends StatelessWidget {
             final cartItems = state.cartItems;
             final totalAmount = state.totalAmount;
             final preferredLocation = state.preferredLocation;
-            final preferredPaymentMethod = state.preferredPaymentMethod;
 
             return SafeArea(
               child: SingleChildScrollView(
@@ -52,7 +54,20 @@ class CheckoutPage extends StatelessWidget {
                     children: [
                       CheckoutTitleWidget(
                         title: 'Address',
-                        onEditTap: () {},
+                        onEditTap: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return BlocProvider.value(
+                                  value: cubit,
+                                  child: const AddressPage(),
+                                );
+                              },
+                            ),
+                          ).then(
+                            (value) => cubit.getCheckoutPage(),
+                          );
+                        },
                       ),
                       LocationItemWidget(location: preferredLocation),
                       const SizedBox(height: 24),
@@ -75,9 +90,112 @@ class CheckoutPage extends StatelessWidget {
                         title: 'Payment Methods',
                       ),
                       const SizedBox(height: 16),
-                      PaymentMethodItemWidget(
-                        paymentMethod: preferredPaymentMethod,
-                      ),
+                      InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              backgroundColor: AppColors.white,
+                              constraints: BoxConstraints(
+                                maxHeight: (size.height / 3) * 2,
+                                minHeight: size.height / 3,
+                                minWidth: size.width,
+                              ),
+                              context: context,
+                              builder: (context) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Payment Method",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold)),
+                                      const SizedBox(height: 20),
+                                      ...state.paymentMethods.map((e) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              paymentMethod = e.name;
+                                              Navigator.pop(context);
+                                            },
+                                            child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(26),
+                                                  color: AppColors.white),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                child: Row(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              22),
+                                                      child: Image.network(
+                                                        e.imgUrl,
+                                                        height: 120,
+                                                        width: 120,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          e.name,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyMedium!
+                                                                  .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                  ),
+                                                        ),
+                                                        Text(
+                                                          e.cardNumber,
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodySmall!
+                                                              .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color:
+                                                                      AppColors
+                                                                          .grey),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ).then((value) {
+                              cubit.setPaymentMethod(paymentMethod);
+                              cubit.getCheckoutPage();
+                            });
+                          },
+                          child: PaymentMethodItemWidget(
+                              paymentMethod: state.preferredPaymentMethod)),
                       const SizedBox(height: 36),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

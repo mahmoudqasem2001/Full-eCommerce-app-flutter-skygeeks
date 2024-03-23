@@ -7,13 +7,17 @@ abstract class AuthServices {
   Future<bool> signUpWithEmailAndPassword(String email, String password);
   Future<void> signOut();
   Future<User?> currentUser();
+  Future<void> updateUserPhoneNumber(String userId, String phoneNumber);
 }
 
 class AuthServicesImpl implements AuthServices {
   // Singleton Design Pattern
   final firebaseAuth = FirebaseAuth.instance;
   final firestoreServices = FirestoreService.instance;
-
+  PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+    verificationId: '',
+    smsCode: '',
+  );
   @override
   Future<bool> signInWithEmailAndPassword(String email, String password) async {
     final userCredential = await firebaseAuth.signInWithEmailAndPassword(
@@ -51,9 +55,23 @@ class AuthServicesImpl implements AuthServices {
     }
     return false;
   }
-  
+
   @override
   Future<User?> currentUser() {
     return Future.value(firebaseAuth.currentUser);
+  }
+
+  Future<void> updateUserPhoneNumber(String userId, String phoneNumber) async {
+    User? user = firebaseAuth.currentUser;
+
+    if (user != null) {
+      await firestoreServices.setData(path: ApiPaths.user(userId), data: {
+        'uid': user.uid,
+        'email': user.email,
+        'name': user.displayName,
+        'phone': phoneNumber,
+        'photoUrl': user.photoURL,
+      });
+    }
   }
 }

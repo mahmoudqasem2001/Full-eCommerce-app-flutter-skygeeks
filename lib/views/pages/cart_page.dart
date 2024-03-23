@@ -61,7 +61,7 @@ class CartPage extends StatelessWidget {
                     child: MainButton(
                       onPressed: () {
                           Navigator.of(context, rootNavigator: true).pushNamed(
-                          AppRoutes.checkoutRoute,
+                          AppRoutes.checkoutPage,
                         );
                       },
                       child: const Text('Checkout'),
